@@ -64,8 +64,9 @@ async function searchSimilarSamples(referenceEmbedding, k = 5) {
   const indices = new Int32Array(k);
   index.search(query, k, distances, indices); // Returns distances and indices
 
-  // Map indices back to sample IDs
-  return indices.map(i => sampleIds[i]);
+  // Convert typed array indices to a plain array before mapping to IDs/paths
+  const resultIndices = Array.from(indices);
+  return resultIndices.map((i) => sampleIds[i]);
 }
 5. Integrate with WyldKard’s UI
 In AISearchDemo.tsx, add a "Search by Audio" tab that:
