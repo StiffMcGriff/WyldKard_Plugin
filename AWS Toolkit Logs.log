@@ -1,0 +1,35 @@
+2026-02-10 05:32:30.779 [info] Log level: info, beta=false
+2026-02-10 05:32:30.779 [info] endpoints: retrieving AWS endpoints data
+2026-02-10 05:32:30.779 [info] Telemetry product: AWS Toolkit For VS Code
+2026-02-10 05:32:31.788 [info] Telemetry clientId: a3d531c2-f26a-44e5-8a0e-142d5000935b
+2026-02-10 05:32:31.789 [info] Telemetry sessionId: 4deea976-ccbe-48b0-b0fe-8494de106409
+2026-02-10 05:32:40.409 [warning] AwsContext: no default region in credentials profile, falling back to us-east-1:
+2026-02-10 05:32:58.822 [info] OS: Windows_NT x64 10.0.26200
+2026-02-10 05:32:58.822 [info] Visual Studio Code extension host:  1.109.0
+2026-02-10 05:32:58.823 [info] AWS Toolkit:  3.95.0
+2026-02-10 05:32:58.823 [info] node: 22.21.1
+2026-02-10 05:32:58.823 [info] electron: 39.3.0
+2026-02-10 05:32:59.062 [info] initialized 'submitFeedback' command with default feedback id: AWS Toolkit
+2026-02-10 05:32:59.077 [warning] Ec2MetadataClient failed to fetch token. If this is an EC2 environment, then Toolkit will fall back to IMDSv1: ProviderError: Unable to connect to instance metadata service [ENETUNREACH]
+2026-02-10 05:32:59.913 [info] CloudFormation telemetry: choice=true, hasResponded=true, lastPromptDate=undefined
+2026-02-10 05:32:59.913 [info] using cloudformationLsp service configuration: default
+2026-02-10 05:32:59.913 [info] awsCfnLsp: Found CloudFormation LSP provider: RemoteLspServerProvider
+2026-02-10 05:32:59.963 [info] Remote debugging is initiated
+2026-02-10 05:32:59.963 [info] smus: SMUS Connection: Clearing all cached clients
+2026-02-10 05:32:59.963 [info] smus: Not in SageMaker Unified Studio remote environment, skipping user activity monitoring
+2026-02-10 05:33:00.152 [info] awsCfnLsp: Candidate versions: 1.3.1[darwin-arm64-22,darwin-x64-22,linux-arm64-22,linux-x64-22,linuxglib2.28-arm64-18,linuxglib2.28-x64-18,win32-arm64-22,windows-arm64-22,win32-x64-22,windows-x64-22], 1.2.0[darwin-arm64-22,darwin-x64-22,linux-arm64-22,linux-x64-22,linuxglib2.28-arm64-18,linuxglib2.28-x64-18,win32-arm64-22,windows-arm64-22,win32-x64-22,windows-x64-22], 1.1.0[darwin-arm64-22,darwin-x64-22,linux-arm64-22,linux-x64-22,win32-arm64-22,windows-arm64-22,win32-x64-22,windows-x64-22], 1.0.0[darwin-arm64-22,darwin-x64-22,linux-arm64-22,linux-x64-22,win32-arm64-22,windows-arm64-22,win32-x64-22,windows-x64-22]
+2026-02-10 05:33:00.152 [info] awsCfnLsp: Creating CloudFormation LSP manifest for prod
+2026-02-10 05:33:14.578 [info] lsp: Finished preparing "cloudformation-languageserver" LSP server: 'C:\\Users\\capci\\AppData\\Local\\aws\\toolkits\\language-servers\\cloudformation-languageserver/1.3.1'
+2026-02-10 05:33:14.832 [info] awsCfnLsp: Found CloudFormation LSP executable: C:\Users\capci\AppData\Local\aws\toolkits\language-servers\cloudformation-languageserver\1.3.1\cloudformation-languageserver-1.3.1-win32-x64-node22\cfn-lsp-server-standalone.js
+2026-02-10 05:37:32.363 [info] telemetry: sent batch (size=10)
+2026-02-10 05:47:32.561 [info] telemetry: sent batch (size=3)
+2026-02-10 05:52:32.800 [info] telemetry: sent batch (size=1)
+2026-02-10 05:57:33.002 [info] telemetry: sent batch (size=2)
+2026-02-10 05:57:40.052 [warning] CloudFormationTemplateRegistry: addWatchPatterns(**/*.{yaml,yml,json,template}): no workspace
+2026-02-10 05:57:40.052 [info] CloudFormationTemplateRegistry: building with: Watching **/*.{yaml,yml,json,template}, Untitled Files, Excluding /.*devfile\.(yaml|yml)/i, /.*[/\\]\.aws-sam([/\\].*|$)/
+2026-02-10 05:57:40.073 [info] CloudFormationTemplateRegistry: processed 0 items
+2026-02-10 05:57:40.076 [error] aws.samcli.sync: Error: Template file not found: \github-workflow.json
+2026-02-10 05:57:40.076 [warning] telemetry: invalid Metric: "appcomposer_deployCompleted" emitted with result=Failed but without the `reason` property. Consider using `.run()` instead of `.emit()`, which will set these properties automatically. See https://github.com/aws/aws-toolkit-vscode/blob/master/docs/telemetry.md#guidelines
+2026-02-10 05:58:28.388 [info] FPS_LOG
+2026-02-10 06:02:33.323 [info] telemetry: sent batch (size=7)
+2026-02-10 06:06:28.398 [info] FPS_LOG
