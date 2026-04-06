@@ -14,7 +14,15 @@ public:
     // Add this declaration to the public section
     void previewSample (const juce::String& sampleName);
 private:
-    // This component hosts your React/Vite app
+    //// Add to the private section of PluginProcessor.h
+private:
+    juce::AudioFormatManager formatManager;
+    std::unique_ptr<juce::AudioFormatReaderSource> readerSource;
+    juce::AudioTransportSource transportSource;
+
+public:
+    // Add this to the public section
+    void previewSample (const juce::String& sampleName); This component hosts your React/Vite app
     juce::WebBrowserComponent webBrowser;
 private:
     juce::AudioFormatManager formatManager;
