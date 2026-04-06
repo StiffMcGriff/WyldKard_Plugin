@@ -9,20 +9,31 @@ interface Sample {
   duration: string;
   waveform: number[];
 }
+/declare global {
+  interface Window {
+    juce: {
+      sendToNative: (message: string) => void;
+      getNativeData: (key: string) => any;
+    };
+  }
+}/ Update this function in SampleSearchDemo.tsx
 // Update this function in SampleSearchDemo.tsx
-const handleSampleClick = (sample: Sample) => {
+const handleSampleClick = (sample: any) => {
   if (window.juce) {
-    // Send a stringified object or a specific path/ID to C++
-    window.juce.sendToNative(JSON.stringify({
+    // We send a JSON string so C++ can easily parse multiple parameters
+    const message = JSON.stringify({
       action: 'PLAY_SAMPLE',
       payload: {
-        id: sample.id,
         name: sample.name,
+        path: sample.path || '',
         bpm: sample.bpm
       }
-    }));
+    });
+    
+    window.juce.sendToNative(message);
   } else {
-    console.log("Browser Mode: Playing", sample.name);
+    // Fallback for when you're testing in a regular browser
+    console.log("Browser Mode: Previewing", sample.name);
   }
 };
 const mockSamples: Sample[] = [
@@ -78,7 +89,12 @@ const handleSampleClick = (samplePath: string) => {
             Search, filter, and preview samples in real-time. Drag samples to see the drag-and-drop functionality.
           </p>
         </div>
-
+<button 
+  onClick={() => handleSampleClick(sample)} 
+  className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-500 text-white"
+>
+  <PlayIcon className="h-4 w-4" />
+</button>
         <div className="mx-auto mt-16 max-w-6xl">
           <div className="overflow-hidden rounded-3xl border border-slate-800 bg-slate-900/50 shadow-2xl backdrop-blur-sm">
             {/* Search and Filters */}
