@@ -8,7 +8,14 @@ WyldKardAudioProcessorEditor::WyldKardAudioProcessorEditor (WyldKardAudioProcess
     addAndMakeVisible (webBrowser);
 
     // // src/PluginEditor.cpp inside the sendToNative callback
-
+if (var.getProperty("action", "").toString() == "OPEN_STEMS_FOLDER")
+{
+    juce::File stemDir = juce::File::getSpecialLocation(juce::File::userHomeDirectory)
+                         .getChildFile("Music")
+                         .getChildFile("WyldKard_Stems");
+                         
+    stemDir.revealToUser(); // This opens File Explorer/Finder exactly at that folder
+}
 if (var.getProperty("action", "").toString() == "REMAKE_UVR")
 {
     auto path = var.getProperty("payload", "").getProperty("path", "").toString();
