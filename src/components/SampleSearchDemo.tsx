@@ -1,5 +1,30 @@
 import { useState } from 'react';
+// 1. Add this state at the top of your component
+const [selectedModel, setSelectedModel] = useState("UVR-MDX-NET-Inst_HQ_3");
 
+// 2. Update your handleRemake function
+const handleRemake = (sample: any) => {
+  if (window.juce) {
+    window.juce.sendToNative(JSON.stringify({
+      action: 'REMAKE_UVR',
+      payload: {
+        path: sample.path,
+        model: selectedModel // This passes your choice to JUCE
+      }
+    }));
+  }
+};
+
+// 3. Add this JSX for the selector
+<select 
+  value={selectedModel} 
+  onChange={(e) => setSelectedModel(e.target.value)}
+  className="bg-slate-900 text-indigo-400 text-xs rounded border border-indigo-900/50 p-1"
+>
+  <option value="UVR-MDX-NET-Inst_HQ_3">Instrumental HQ</option>
+  <option value="Vocals-Only">Vocals (Lead/Backing)</option>
+  <option value="Full-Stems">Full Stems (4-Way)</option>
+</select>
 interface Sample {
   id: number;
   name: string;
