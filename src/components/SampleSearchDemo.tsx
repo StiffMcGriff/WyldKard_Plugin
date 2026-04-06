@@ -118,6 +118,18 @@ const handleSampleClick = (samplePath: string) => {
   }
 };
   return (
+    // Inside your component's return block:
+<div className="flex items-center gap-2 mb-4">
+  <span className="text-[10px] text-slate-500 uppercase font-bold">AI Model:</span>
+  <select 
+    onChange={(e) => setSelectedModel(e.target.value)}
+    className="bg-slate-900 text-indigo-400 text-xs rounded border border-indigo-900/50 p-1"
+  >
+    <option value="UVR-MDX-NET-Inst_HQ_3">Instrumental HQ (MDX)</option>
+    <option value="Vocals-Only">Vocals Only (MDX-Voc)</option>
+    <option value="Full-Stems">Full Stems (Demucs v4)</option>
+  </select>
+</div>
     <div className="relative py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
