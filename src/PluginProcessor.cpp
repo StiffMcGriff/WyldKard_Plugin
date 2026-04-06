@@ -169,3 +169,58 @@ void WyldKardAudioProcessor::writeStemToFile(const juce::File& file, const juce:
         }
     }
 }
+// --- UVR 5 AI Engine: Inference & File Generation ---
+
+void WyldKardAudioProcessor::startUVRProcess(const juce::String& samplePath, const juce::String& modelType)
+{
+    isProcessingAI = true;
+    aiProgress = 0.0f;
+
+    // 1. Create a "Stems" folder in your Music directory
+    juce::File outputDir = juce::File::getSpecialLocation(juce::File::userHomeDirectory)
+                           .getChildFile("Music")
+                           .getChildFile("WyldKard_Stems");
+    outputDir.createDirectory();
+
+    // 2. Run Inference (Assuming you've linked the ONNX Runtime)
+    runUVRModel(samplePath, modelType);
+}
+
+void WyldKardAudioProcessor::runUVRModel(const juce::String& inputPath, const juce::String& modelType)
+{
+    try {
+        // [ONNX INFERENCE LOGIC]
+        // After processing, we get 'vocalBuffer' and 'instrBuffer'
+        
+        juce::File input(inputPath);
+        juce::File outputDir = juce::File::getSpecialLocation(juce::File::userHomeDirectory)
+                               .getChildFile("Music").getChildFile("WyldKard_Stems");
+
+        // 3. Automatically Write the Stems to Disk as 16-bit WAVs
+        writeStemToFile(outputDir.getChildFile(input.getFileNameWithoutExtension() + "_Vocals.wav"), vocalBuffer);
+        writeStemToFile(outputDir.getChildFile(input.getFileNameWithoutExtension() + "_Instrumental.wav"), instrBuffer);
+
+        DBG("AI Remake Complete: Stems saved to " << outputDir.getFullPathName());
+        
+        // Notify the UI that processing is finished
+        isProcessingAI = false;
+    }
+    catch (const std::exception& e) { 
+        DBG("AI Error: " << e.what()); 
+        isProcessingAI = false;
+    }
+}
+
+void WyldKardAudioProcessor::writeStemToFile(const juce::File& file, const juce::AudioBuffer<float>& buffer)
+{
+    if (auto outStream = std::unique_ptr<juce::FileOutputStream>(file.createOutputStream()))
+    {
+        juce::WavAudioFormat wavFormat;
+        if (auto writer = std::unique_ptr<juce::AudioFormatWriter>(
+            wavFormat.createWriterFor(outStream.get(), getSampleRate(), buffer.getNumChannels(), 16, {}, 0)))
+        {
+            outStream.release(); // Writer now takes ownership of the stream
+            writer->writeFromAudioSampleBuffer(buffer, 0, buffer.getNumSamples());
+        }
+    }
+}
