@@ -118,3 +118,17 @@ void WyldKardAudioProcessor::runUVRModel(const juce::String& inputPath, const ju
     // 4. Once finished, notify the React UI via a callback
     // webBrowser.emitEventIfBrowserIsVisible("UVR_COMPLETE", { {"vocalPath", "..."}, {"instPath", "..."} });
 }
+// src/PluginProcessor.cpp
+
+void WyldKardAudioProcessor::startUVRProcess(const juce::String& samplePath, const juce::String& modelType)
+{
+    DBG("Starting UVR Remake with model: " << modelType << " for file: " << samplePath);
+    
+    isProcessingAI = true;
+    aiProgress = 0.0f;
+
+    // TODO: Launch your UVR 5 Python script or ONNX session here
+    // Example: juce::ChildProcess.start("python separate_stems.py " + samplePath);
+    
+    // For now, we simulate the start of the process
+}
