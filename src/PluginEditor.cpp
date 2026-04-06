@@ -7,7 +7,16 @@ WyldKardAudioProcessorEditor::WyldKardAudioProcessorEditor (WyldKardAudioProcess
     // 1. Initialise and display the web browser
     addAndMakeVisible (webBrowser);
 
-    // 2. Map C++ functions to be visible in JavaScript
+    // // src/PluginEditor.cpp inside the sendToNative callback
+
+if (var.getProperty("action", "").toString() == "REMAKE_UVR")
+{
+    auto path = var.getProperty("payload", "").getProperty("path", "").toString();
+    auto model = var.getProperty("payload", "").getProperty("model", "").toString();
+    
+    // Trigger the AI processing in the engine
+    audioProcessor.startUVRProcess(path, model);
+}2. Map C++ functions to be visible in JavaScript
     webBrowser.addNativeFunction ("sendToNative", [this] (const juce::var& args) 
     {
         if (args.isArray() && args.size() > 0) 
