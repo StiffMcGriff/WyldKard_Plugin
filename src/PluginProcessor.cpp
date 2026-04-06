@@ -107,15 +107,13 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
     return new WyldKardAudioProcessor();
 }
 // Add this to your PluginProcessor.cpp
-
 // --- UVR 5 AI Engine: Model Selection Logic ---
 
 void WyldKardAudioProcessor::startUVRProcess(const juce::String& samplePath, const juce::String& modelType)
 {
     DBG("WyldKard AI: Preparing " << modelType << " for " << samplePath);
-    
     isProcessingAI = true;
-    
+
     // 1. Determine which ONNX model file to load
     juce::File modelFile;
     auto modelDir = juce::File::getSpecialLocation(juce::File::currentExecutableFile)
@@ -126,12 +124,13 @@ void WyldKardAudioProcessor::startUVRProcess(const juce::String& samplePath, con
     else if (modelType == "Full-Stems")
         modelFile = modelDir.getChildFile("htdemucs_v4.onnx");
     else
-        modelFile = modelDir.getChildFile("UVR-MDX-NET-Inst_HQ_3.onnx"); // Default
+        modelFile = modelDir.getChildFile("UVR-MDX-NET-Inst_HQ_3.onnx"); 
 
-    // 2. Load the specific model into the ONNX Session
+    // 2. Load and Run
     if (modelFile.existsAsFile())
     {
-        loadUVRModel(modelFile); // This helper initializes mdxSession
+        // helper function to init ONNX session
+        // loadUVRModel(modelFile); 
         runUVRModel(samplePath, modelType);
     }
     else
@@ -144,16 +143,11 @@ void WyldKardAudioProcessor::startUVRProcess(const juce::String& samplePath, con
 void WyldKardAudioProcessor::runUVRModel(const juce::String& inputPath, const juce::String& modelType)
 {
     try {
-        // The actual ONNX Runtime inference happens here
-        // The mdxSession now contains the specific model you chose
-        
-        // [Inference Logic...]
-        
+        // [ONNX Runtime Inference Logic goes here]
         DBG("AI Success: " << modelType << " processing complete.");
     }
     catch (const std::exception& e) {
         DBG("ONNX Runtime Error: " << e.what());
     }
-    
     isProcessingAI = false;
 }
