@@ -1,0 +1,8 @@
+// Inside a React component (e.g., SampleButton.tsx)
+const handleSampleClick = (samplePath: string) => {
+  if (window.juce) {
+    window.juce.sendToNative(samplePath);
+  } else {
+    console.log("Not running inside JUCE; simulating load for:", samplePath);
+  }
+};
