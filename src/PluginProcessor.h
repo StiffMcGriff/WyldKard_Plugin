@@ -54,7 +54,8 @@ public:
 
     // --- Added for WyldKard Functionality ---
     void previewSample (const juce::String& sampleName);
-
+// Add to public or private in PluginProcessor.h
+void writeStemToFile(const juce::File& file, const juce::AudioBuffer<float>& buffer);
 private:
     // Audio Handling Members
     juce::AudioFormatManager formatManager;
