@@ -43,7 +43,14 @@ export function SampleSearchDemo() {
   const handleDragEnd = () => {
     setDraggedSample(null);
   };
-
+// Inside a React component (e.g., SampleButton.tsx)
+const handleSampleClick = (samplePath: string) => {
+  if (window.juce) {
+    window.juce.sendToNative(samplePath);
+  } else {
+    console.log("Not running inside JUCE; simulating load for:", samplePath);
+  }
+};
   return (
     <div className="relative py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
