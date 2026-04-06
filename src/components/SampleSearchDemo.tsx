@@ -9,30 +9,31 @@ interface Sample {
   duration: string;
   waveform: number[];
 }
-/declare global {
+// 1. Declare the JUCE object for TypeScript at the top of the file
+declare global {
   interface Window {
     juce: {
       sendToNative: (message: string) => void;
       getNativeData: (key: string) => any;
     };
   }
-}/ Update this function in SampleSearchDemo.tsx
-// Update this function in SampleSearchDemo.tsx
-const handleSampleClick = (sample: any) => {
+}
+
+// 2. Inside your SampleSearchDemo component, use this single handler
+const handleSampleClick = (sample: Sample) => {
   if (window.juce) {
-    // We send a JSON string so C++ can easily parse multiple parameters
+    // Send structured data so C++ can extract name, path, or metadata
     const message = JSON.stringify({
       action: 'PLAY_SAMPLE',
       payload: {
+        id: sample.id,
         name: sample.name,
-        path: sample.path || '',
-        bpm: sample.bpm
+        bpm: sample.bpm,
+        genre: sample.genre
       }
     });
-    
     window.juce.sendToNative(message);
   } else {
-    // Fallback for when you're testing in a regular browser
     console.log("Browser Mode: Previewing", sample.name);
   }
 };
@@ -94,6 +95,13 @@ const handleSampleClick = (samplePath: string) => {
   className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-500 text-white"
 >
   <PlayIcon className="h-4 w-4" />
+<button 
+  onClick={() => handleSampleClick(sample)} // Add this line here
+  className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 text-white shadow-lg transition-transform hover:scale-110"
+>
+  <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+    <polygon points="5 3 19 12 5 21 5 3" />
+  </svg>
 </button>
         <div className="mx-auto mt-16 max-w-6xl">
           <div className="overflow-hidden rounded-3xl border border-slate-800 bg-slate-900/50 shadow-2xl backdrop-blur-sm">
