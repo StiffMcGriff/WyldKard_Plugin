@@ -1,7 +1,11 @@
 import { useState } from 'react';
 // 1. Add this state at the top of your component
 const [selectedModel, setSelectedModel] = useState("UVR-MDX-NET-Inst_HQ_3");
-
+const openStemsFolder = () => {
+  if (window.juce) {
+    window.juce.sendToNative(JSON.stringify({ action: 'OPEN_STEMS_FOLDER' }));
+  }
+};
 // 2. Update your handleRemake function
 const handleRemake = (sample: any) => {
   if (window.juce) {
@@ -21,6 +25,12 @@ const handleRemake = (sample: any) => {
   onChange={(e) => setSelectedModel(e.target.value)}
   className="bg-slate-900 text-indigo-400 text-xs rounded border border-indigo-900/50 p-1"
 >
+  <button 
+  onClick={openStemsFolder}
+  className="mt-2 text-[10px] text-indigo-300 hover:text-white underline decoration-indigo-500/30"
+>
+  📁 Open Stems Folder
+</button>
   <option value="UVR-MDX-NET-Inst_HQ_3">Instrumental HQ</option>
   <option value="Vocals-Only">Vocals (Lead/Backing)</option>
   <option value="Full-Stems">Full Stems (4-Way)</option>
