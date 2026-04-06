@@ -9,7 +9,22 @@ interface Sample {
   duration: string;
   waveform: number[];
 }
-
+// Update this function in SampleSearchDemo.tsx
+const handleSampleClick = (sample: Sample) => {
+  if (window.juce) {
+    // Send a stringified object or a specific path/ID to C++
+    window.juce.sendToNative(JSON.stringify({
+      action: 'PLAY_SAMPLE',
+      payload: {
+        id: sample.id,
+        name: sample.name,
+        bpm: sample.bpm
+      }
+    }));
+  } else {
+    console.log("Browser Mode: Playing", sample.name);
+  }
+};
 const mockSamples: Sample[] = [
   { id: 1, name: "Dark Synth Bass", bpm: 128, key: "A minor", genre: "Electronic", duration: "0:08", waveform: [0.2, 0.5, 0.8, 0.6, 0.9, 0.7, 0.4, 0.3, 0.6, 0.8, 0.5, 0.3] },
   { id: 2, name: "Crispy Hi-Hat Loop", bpm: 140, key: "C major", genre: "Drum & Bass", duration: "0:04", waveform: [0.4, 0.4, 0.5, 0.4, 0.4, 0.5, 0.4, 0.4, 0.5, 0.4, 0.4, 0.5] },
@@ -155,7 +170,15 @@ const handleSampleClick = (samplePath: string) => {
                           <polygon points="5 3 19 12 5 21 5 3" />
                         </svg>
                       </button>
-
+{/* Find this section in your SampleSearchDemo.tsx map loop */}
+<button 
+  onClick={() => handleSampleClick(sample)} // Add this line
+  className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 text-white shadow-lg transition-transform hover:scale-110"
+>
+  <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+    <polygon points="5 3 19 12 5 21 5 3" />
+  </svg>
+</button>
                       {/* Waveform */}
                       <div className="flex flex-1 items-center gap-0.5 overflow-hidden rounded">
                         {sample.waveform.map((height, i) => (
