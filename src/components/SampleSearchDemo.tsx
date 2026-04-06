@@ -19,7 +19,18 @@ declare global {
   }
 }
 
-// 2. Inside your SampleSearchDemo component, use this single handler
+//// Add this to your handleSampleClick or a new handleRemake function
+const handleRemake = (sample: Sample) => {
+  if (window.juce) {
+    window.juce.sendToNative(JSON.stringify({
+      action: 'REMAKE_UVR',
+      payload: {
+        path: sample.path,
+        model: 'MDX-NET-HQ' // You can let users choose the UVR model
+      }
+    }));
+  }
+}; 2. Inside your SampleSearchDemo component, use this single handler
 const handleSampleClick = (sample: Sample) => {
   if (window.juce) {
     // Send structured data so C++ can extract name, path, or metadata
