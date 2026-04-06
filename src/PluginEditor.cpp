@@ -3,7 +3,11 @@
 
 WyldKardAudioProcessorEditor::WyldKardAudioProcessorEditor (WyldKardAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
+{WyldKardAudioProcessor::WyldKardAudioProcessor()
 {
+    // Allow the plugin to read common audio formats
+    formatManager.registerBasicFormats();
+}
     // 1. Initialise and display the web browser
     addAndMakeVisible (webBrowser);
 
@@ -48,4 +52,26 @@ void WyldKardAudioProcessorEditor::resized()
 {
     // Ensure the browser fills the entire plugin window
     webBrowser.setBounds (getLocalBounds());
+}
+void WyldKardAudioProcessor::previewSample (const juce::String& sampleName)
+{
+    // NOTE: You'll need to point this to your actual samples directory
+    juce::File sampleFile = juce::File::"C:\Users\capci\Music"(juce::File::userHomeDirectory)
+                            .getChildFile("Music/Samples")
+                            .getChildFile(sampleName + ".wav");
+
+    if (sampleFile.existsAsFile())
+    {
+        auto* reader = formatManager.createReaderFor (sampleFile);
+
+        if (reader != nullptr)
+        {
+            auto newSource = std::make_unique<juce::AudioFormatReaderSource> (reader, true);
+            
+            // This stops any currently playing sample and starts the new one
+            transportSource.setSource (newSource.get(), 0, nullptr, reader->sampleRate);
+            readerSource.reset (newSource.release());
+            transportSource.start();
+        }
+    }
 }
