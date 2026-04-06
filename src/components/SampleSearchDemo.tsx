@@ -273,7 +273,13 @@ const handleSampleClick = (samplePath: string) => {
               )}
             </div>
           </div>
-
+{/* Inside your filteredSamples.map in SampleSearchDemo.tsx */}
+<button 
+  onClick={() => handleRemake(sample)}
+  className="ml-2 rounded-md bg-slate-800 px-2 py-1 text-[10px] font-bold text-indigo-400 hover:bg-indigo-500 hover:text-white transition-colors"
+>
+  REMAKE (UVR5)
+</button>
           {/* Drag Drop Zone */}
           <div className="mt-6 rounded-2xl border-2 border-dashed border-slate-800 bg-slate-900/30 p-8 text-center backdrop-blur-sm transition-colors hover:border-slate-700">
             <div className="mx-auto h-16 w-16 rounded-full bg-slate-800 flex items-center justify-center mb-4">
