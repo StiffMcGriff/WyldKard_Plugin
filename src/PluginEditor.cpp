@@ -15,13 +15,24 @@ WyldKardAudioProcessorEditor::WyldKardAudioProcessorEditor (WyldKardAudioProcess
     });
 
     // 3. Register a native callback
-    webBrowser.addNativeFunction ("sendToNative", [this] (const juce::var& args) {
-        if (args.isArray()) {
-            auto message = args[0].toString();
-            // Logic to pass data to your AudioProcessor
-            // e.g., audioProcessor.loadSample(message);
+    // Inside WyldKardAudioProcessorEditor constructor
+webBrowser.addNativeFunction ("sendToNative", [this] (const juce::var& args) 
+{
+    if (args.isArray() && args.size() > 0) 
+    {
+        auto jsonString = args[0].toString();
+        auto var = juce::JSON::parse(jsonString);
+        
+        if (var.getProperty("action", "").toString() == "PLAY_SAMPLE")
+        {
+            auto sampleName = var.getProperty("payload", "").getProperty("name", "").toString();
+            DBG("JUCE: User wants to play " << sampleName);
+            
+            // Call a function in your Processor to trigger the audio
+            // audioProcessor.previewSample(sampleName);
         }
-    });
+    }
+});
 
     // 4. Load your Vite dev server URL
     // Switch this to a local resource for production builds
