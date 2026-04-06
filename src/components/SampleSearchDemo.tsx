@@ -26,10 +26,12 @@ const handleRemake = (sample: Sample) => {
       action: 'REMAKE_UVR',
       payload: {
         path: sample.path,
-        model: 'MDX-NET-HQ' // You can let users choose the UVR model
+        name: sample.name,
+        model: 'UVR-MDX-NET-Inst_HQ_3' // The gold standard model
       }
     }));
   }
+};
 }; 2. Inside your SampleSearchDemo component, use this single handler
 const handleSampleClick = (sample: Sample) => {
   if (window.juce) {
