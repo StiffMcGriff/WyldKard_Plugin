@@ -27,7 +27,7 @@ WyldKardAudioProcessor::~WyldKardAudioProcessor()
 void WyldKardAudioProcessor::previewSample (const juce::String& sampleName)
 {
     // Update this path to your actual samples folder
-    juce::File sampleFile = juce::File::getSpecialLocation(juce::File::userHomeDirectory)
+    juce::File sampleFile = juce::File::"C:\Users\capci\Music"(juce::File::userHomeDirectory)
                             .getChildFile("Music/Samples")
                             .getChildFile(sampleName + ".wav");
 
