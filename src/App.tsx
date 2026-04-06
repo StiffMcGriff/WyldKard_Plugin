@@ -13,3 +13,8 @@ export function App() {
     </div>
   );
 }
+declare global {
+  interface Window {
+    juce: any;
+  }
+}
