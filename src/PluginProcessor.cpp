@@ -106,3 +106,15 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new WyldKardAudioProcessor();
 }
+// Add this to your PluginProcessor.cpp
+void WyldKardAudioProcessor::runUVRModel(const juce::String& inputPath, const juce::String& modelType)
+{
+    // 1. Prepare the ONNX session (You'll need the ONNX Runtime headers)
+    // auto session = Ort::Session(env, modelPath, session_options);
+
+    // 2. Load the audio file into a tensor
+    // 3. Run Inference (this is where the AI "Remakes" the stems)
+    
+    // 4. Once finished, notify the React UI via a callback
+    // webBrowser.emitEventIfBrowserIsVisible("UVR_COMPLETE", { {"vocalPath", "..."}, {"instPath", "..."} });
+}
