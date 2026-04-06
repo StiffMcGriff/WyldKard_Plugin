@@ -26,9 +26,10 @@ WyldKardAudioProcessor::~WyldKardAudioProcessor()
 // This is the function called by your React UI via the PluginEditor
 void WyldKardAudioProcessor::previewSample (const juce::String& sampleName)
 {
-    // Update this path to your actual samples folder
-    juce::File sampleFile = juce::File::"C:\Users\capci\Music"(juce::File::userHomeDirectory)
-                            .getChildFile("Music/Samples")
+    // This correctly builds the path: C:\Users\YourName\Music\Samples\filename.wav
+    juce::File sampleFile = juce::File::getSpecialLocation(juce::File::userHomeDirectory)
+                            .getChildFile("Music")
+                            .getChildFile("Samples")
                             .getChildFile(sampleName + ".wav");
 
     if (sampleFile.existsAsFile())
@@ -44,6 +45,10 @@ void WyldKardAudioProcessor::previewSample (const juce::String& sampleName)
             readerSource.reset (newSource.release());
             transportSource.start();
         }
+    }
+    else 
+    {
+        DBG("File not found at: " << sampleFile.getFullPathName());
     }
 }
 
