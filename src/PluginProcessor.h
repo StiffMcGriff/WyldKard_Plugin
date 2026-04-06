@@ -55,3 +55,12 @@ private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WyldKardAudioProcessor)
 };
+// src/PluginProcessor.h
+
+public:
+    // This will be called when the "Remake" button is clicked in React
+    void startUVRProcess(const juce::String& samplePath, const juce::String& modelType);
+
+private:
+    bool isProcessingAI = false;
+    float aiProgress = 0.0f;
