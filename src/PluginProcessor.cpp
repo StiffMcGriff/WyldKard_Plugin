@@ -107,35 +107,31 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
     return new WyldKardAudioProcessor();
 }
 // Add this to your PluginProcessor.cpp
-// --- UVR 5 AI Engine: Model Selection Logic ---
+// --- UVR 5 AI Engine: Inference & File Generation ---
 
 void WyldKardAudioProcessor::startUVRProcess(const juce::String& samplePath, const juce::String& modelType)
 {
-    DBG("WyldKard AI: Preparing " << modelType << " for " << samplePath);
     isProcessingAI = true;
+    aiProgress = 0.0f;
 
-    // 1. Determine which ONNX model file to load
-    juce::File modelFile;
-    auto modelDir = juce::File::getSpecialLocation(juce::File::currentExecutableFile)
-                    .getParentDirectory().getChildFile("Models");
+    // 1. Create a "Stems" folder in your Music directory
+    juce::File outputDir = juce::File::getSpecialLocation(juce::File::userHomeDirectory)
+                           .getChildFile("Music")
+                           .getChildFile("WyldKard_Stems");
+    outputDir.createDirectory();
 
-    if (modelType == "Vocals-Only")
-        modelFile = modelDir.getChildFile("UVR-MDX-NET-Voc_FT.onnx");
-    else if (modelType == "Full-Stems")
-        modelFile = modelDir.getChildFile("htdemucs_v4.onnx");
-    else
-        modelFile = modelDir.getChildFile("UVR-MDX-NET-Inst_HQ_3.onnx"); 
+    // 2. Determine Model File
+    juce::File modelFile = juce::File::getSpecialLocation(juce::File::currentExecutableFile)
+                           .getParentDirectory().getChildFile("Models");
 
-    // 2. Load and Run
-    if (modelFile.existsAsFile())
-    {
-        // helper function to init ONNX session
-        // loadUVRModel(modelFile); 
+    if (modelType == "Vocals-Only") modelFile = modelFile.getChildFile("UVR-MDX-NET-Voc_FT.onnx");
+    else if (modelType == "Full-Stems") modelFile = modelFile.getChildFile("htdemucs_v4.onnx");
+    else modelFile = modelFile.getChildFile("UVR-MDX-NET-Inst_HQ_3.onnx");
+
+    // 3. Run Inference
+    if (modelFile.existsAsFile()) {
         runUVRModel(samplePath, modelType);
-    }
-    else
-    {
-        DBG("AI Error: Model file missing at " << modelFile.getFullPathName());
+    } else {
         isProcessingAI = false;
     }
 }
@@ -143,11 +139,33 @@ void WyldKardAudioProcessor::startUVRProcess(const juce::String& samplePath, con
 void WyldKardAudioProcessor::runUVRModel(const juce::String& inputPath, const juce::String& modelType)
 {
     try {
-        // [ONNX Runtime Inference Logic goes here]
-        DBG("AI Success: " << modelType << " processing complete.");
+        // [ONNX INFERENCE HAPPENS HERE]
+        // Assume 'vocalData' and 'instrData' are the float buffers returned by the AI
+        
+        juce::File input(inputPath);
+        juce::File outputDir = juce::File::getSpecialLocation(juce::File::userHomeDirectory)
+                               .getChildFile("Music").getChildFile("WyldKard_Stems");
+
+        // 4. Automatically Write the Stems to Disk
+        writeStemToFile(outputDir.getChildFile(input.getFileNameWithoutExtension() + "_Vocals.wav"), vocalData);
+        writeStemToFile(outputDir.getChildFile(input.getFileNameWithoutExtension() + "_Instrumental.wav"), instrData);
+
+        DBG("AI Remake Complete: Stems saved to " << outputDir.getFullPathName());
     }
-    catch (const std::exception& e) {
-        DBG("ONNX Runtime Error: " << e.what());
-    }
+    catch (const std::exception& e) { DBG(e.what()); }
     isProcessingAI = false;
+}
+
+void WyldKardAudioProcessor::writeStemToFile(const juce::File& file, const juce::AudioBuffer<float>& buffer)
+{
+    if (auto outStream = std::unique_ptr<juce::FileOutputStream>(file.createOutputStream()))
+    {
+        juce::WavAudioFormat wavFormat;
+        if (auto writer = std::unique_ptr<juce::AudioFormatWriter>(
+            wavFormat.createWriterFor(outStream.get(), getSampleRate(), buffer.getNumChannels(), 16, {}, 0)))
+        {
+            outStream.release(); // Writer now owns the stream
+            writer->writeFromAudioSampleBuffer(buffer, 0, buffer.getNumSamples());
+        }
+    }
 }
