@@ -1,7 +1,16 @@
 #pragma once
 
 #include <JuceHeader.h>
+// Add to the include section
+#include <onnxruntime_cxx_api.h>
 
+// Add to the private section of WyldKardAudioProcessor
+private:
+    Ort::Env env{ORT_LOGGING_LEVEL_WARNING, "UVR5_Inference"};
+    std::unique_ptr<Ort::Session> mdxSession;
+    
+    // Function to initialize the AI model
+    void loadUVRModel(const juce::File& modelFile);
 //==============================================================================
 class WyldKardAudioProcessor  : public juce::AudioProcessor
 {
