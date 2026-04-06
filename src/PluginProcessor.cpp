@@ -132,3 +132,20 @@ void WyldKardAudioProcessor::startUVRProcess(const juce::String& samplePath, con
     
     // For now, we simulate the start of the process
 }
+void WyldKardAudioProcessor::startUVRProcess(const juce::String& samplePath, const juce::String& modelType)
+{
+    // 1. Load the audio file into memory
+    juce::File file(samplePath);
+    // (Add code to read file into a float vector)
+
+    // 2. Prepare the ONNX Tensors
+    std::vector<int64_t> inputShape = { 1, 2, 44100 * 10 }; // Example: 10 seconds of stereo
+    auto memoryInfo = Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
+    // (Create Ort::Value from your audio data)
+
+    // 3. Run the UVR 5 Model (Inference)
+    // auto outputTensors = mdxSession->Run(Ort::RunOptions{nullptr}, ...);
+
+    // 4. Convert output back to Audio Files (Vocals.wav, Instrumental.wav)
+    // 5. Notify the React UI that it's done!
+}
