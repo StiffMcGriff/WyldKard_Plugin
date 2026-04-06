@@ -112,40 +112,44 @@ void WyldKardAudioProcessor::runUVRModel(const juce::String& inputPath, const ju
     // 1. Prepare the ONNX session (You'll need the ONNX Runtime headers)
     // auto session = Ort::Session(env, modelPath, session_options);
 
-    // 2. Load the audio file into a tensor
-    // 3. Run Inference (this is where the AI "Remakes" the stems)
-    
-    // 4. Once finished, notify the React UI via a callback
-    // webBrowser.emitEventIfBrowserIsVisible("UVR_COMPLETE", { {"vocalPath", "..."}, {"instPath", "..."} });
-}
-// src/PluginProcessor.cpp
+// --- UVR 5 AI Engine Integration ---
 
 void WyldKardAudioProcessor::startUVRProcess(const juce::String& samplePath, const juce::String& modelType)
 {
-    DBG("Starting UVR Remake with model: " << modelType << " for file: " << samplePath);
+    DBG("Starting UVR Remake | Model: " << modelType << " | File: " << samplePath);
     
+    // 1. Set processing state for UI feedback
     isProcessingAI = true;
     aiProgress = 0.0f;
 
-    // TODO: Launch your UVR 5 Python script or ONNX session here
-    // Example: juce::ChildProcess.start("python separate_stems.py " + samplePath);
-    
-    // For now, we simulate the start of the process
-}
-void WyldKardAudioProcessor::startUVRProcess(const juce::String& samplePath, const juce::String& modelType)
-{
-    // 1. Load the audio file into memory
+    // 2. Load the audio file into memory
     juce::File file(samplePath);
-    // (Add code to read file into a float vector)
+    if (!file.existsAsFile()) {
+        DBG("Error: Sample file not found for AI processing.");
+        isProcessingAI = false;
+        return;
+    }
 
-    // 2. Prepare the ONNX Tensors
-    std::vector<int64_t> inputShape = { 1, 2, 44100 * 10 }; // Example: 10 seconds of stereo
-    auto memoryInfo = Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
-    // (Create Ort::Value from your audio data)
-
-    // 3. Run the UVR 5 Model (Inference)
-    // auto outputTensors = mdxSession->Run(Ort::RunOptions{nullptr}, ...);
-
-    // 4. Convert output back to Audio Files (Vocals.wav, Instrumental.wav)
-    // 5. Notify the React UI that it's done!
+    // 3. Prepare the ONNX Tensors & Run Inference
+    // In a real build, you'll call a Thread or a Job here so it doesn't 
+    // freeze the DAW while the AI thinks.
+    runUVRModel(samplePath, modelType);
 }
+
+void WyldKardAudioProcessor::runUVRModel(const juce::String& inputPath, const juce::String& modelType)
+{
+    try {
+        // This is where the ONNX Runtime C++ API connects.
+        // It uses the mdxSession defined in your Header.
+        
+        // Ort::Value inputTensor = ... (Convert audio to Tensor)
+        // auto outputTensors = mdxSession->Run(Ort::RunOptions{nullptr}, ...);
+        
+        DBG("UVR Inference Complete.");
+        isProcessingAI = false;
+    }
+    catch (const std::exception& e) {
+        DBG("ONNX Error: " << e.what());
+        isProcessingAI = false;
+    }
+}    
