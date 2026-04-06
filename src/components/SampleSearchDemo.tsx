@@ -20,16 +20,17 @@ declare global {
 }
 
 //// Add this to your handleSampleClick or a new handleRemake function
-const handleRemake = (sample: Sample) => {
+const handleRemake = (sample: Sample, modelName: string = "UVR-MDX-NET-Inst_HQ_3") => {
   if (window.juce) {
     window.juce.sendToNative(JSON.stringify({
       action: 'REMAKE_UVR',
       payload: {
         path: sample.path,
-        name: sample.name,
-        model: 'UVR-MDX-NET-Inst_HQ_3' // The gold standard model
+        model: modelName // This now passes your choice to C++
       }
     }));
+  }
+};
   }
 };
 }; 2. Inside your SampleSearchDemo component, use this single handler
